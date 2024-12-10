@@ -1,5 +1,5 @@
 ## Bioinformatics Network Visualization & Graph Analysis
-This is an interactive web-based application built with R and Shiny that allows users to visualize and analyze biological networks. The app can handle SBML (Systems Biology Markup Language) files to create graphs, and provides features for adding/deleting nodes and edges, as well as performing various types of analysis on the network. These analyses include centrality analysis and cluster analysis, which help identify important nodes and communities within the network.
+This is an interactive web-based application built with RShiny that allows users to visualize and analyze biological networks. The app can handle SBML (Systems Biology Markup Language) files to create graphs, and provides features for adding/deleting nodes and edges, as well as performing various types of analysis on the network. These analyses include centrality analysis and cluster analysis, which help identify important nodes and communities within the network.
 
 # Features
 Graph Creation: Import an SBML file to create and visualize a biological network.
@@ -9,7 +9,8 @@ Graph Analysis:
 Centrality Analysis: Evaluate the centrality of nodes using degree, closeness, or betweenness centrality metrics.
 Cluster Analysis: Identify clusters of nodes within the graph using community detection algorithms like walktrap.
 Graph Visualization: Visualize the network with interactive features such as zooming, panning, and node highlighting.
-Installation
+
+# Installation
 To run this application locally, follow the steps below.
 
 # Prerequisites
@@ -24,10 +25,11 @@ Install the necessary packages by running the following R code:
 
 
 install.packages(c("shiny", "visNetwork", "igraph", "memoise", "DT"))
-Running the Application
+
+# Running the Application
 Clone this repository to your local machine and navigate to the project directory. Then run the following command to start the app:
 
-shiny::runApp("path_to_your_app_directory")
+shiny::runApp("path_to_project_directory")
 This will launch the app in your default web browser.
 
 SBML File
@@ -53,6 +55,7 @@ Perform cluster analysis to detect clusters of nodes within the network.
 Download SBML:
 
 Download the current network as an SBML file to save your work.
+
 # Advanced Features
 Centrality Metrics: Degree, closeness, and betweenness centrality are available to evaluate the importance of nodes within the network.
 Community Detection: Use the walktrap algorithm to identify clusters of nodes that are tightly connected.
