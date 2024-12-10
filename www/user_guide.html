@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Manual - AnaMetabo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        header, footer {
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 1em 0;
+        }
+        main {
+            margin: 20px;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        ul, ol {
+            padding-left: 20px;
+        }
+        ul ul, ul ol, ol ul, ol ol {
+            margin-top: 0.5em;
+        }
+        code {
+            background-color: #f9f9f9;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: Consolas, monospace;
+        }
+        a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>User Manual for AnaMetabo Application</h1>
+</header>
+<main>
+    <section>
+        <h2>Introduction</h2>
+        <p>AnaMetabo is a user-friendly bioinformatics platform designed to analyze and visualize metabolic networks, with a specific focus on the H5N1 virus. It supports researchers in exploring virus-host dynamics and modeling biological interactions through an interactive web-based interface.</p>
+        <h3>Requirements:</h3>
+        <ul>
+            <li>Stable internet connection.</li>
+            <li>A modern browser (e.g., Chrome or Firefox).</li>
+            <li>No installation required; runs directly in the browser.</li>
+        </ul>
+    </section>
+    <section>
+        <h2>Getting Started</h2>
+        <h3>Accessing AnaMetabo</h3>
+        <p>Open AnaMetabo through the provided URL. The home page introduces the application, outlining its features. A sample SBML file is available for download to explore the application.</p>
+        <h3>Steps to Upload Your Data:</h3>
+        <ol>
+            <li>Go to the <strong>Network Visualization</strong> tab.</li>
+            <li>Click <strong>"Import an SBML File"</strong> and select your file.</li>
+            <li>Ensure your file adheres to the SBML standard.</li>
+        </ol>
+        <h3>SBML File Components</h3>
+        <ul>
+            <li><strong>Metabolite:</strong> Circular nodes.</li>
+            <li><strong>Enzyme:</strong> Diamond-shaped nodes.</li>
+            <li><strong>Reaction:</strong> Red square nodes.</li>
+        </ul>
+    </section>
+    <section>
+        <h2>Using the Application</h2>
+        <h3>Home Page</h3>
+        <p>This section provides an overview of AnaMetabo and includes links to download a sample SBML file and access the user manual.</p>
+        <h3>Network Visualization</h3>
+        <p>After uploading an SBML file, AnaMetabo generates a graphical representation of the network:</p>
+        <ul>
+            <li>Visualize nodes (e.g., proteins, metabolites) and edges (e.g., reactions).</li>
+            <li>Adjust graph layouts (<strong>Hierarchical</strong>, <strong>Circular</strong>).</li>
+            <li>Interact with the graph:
+                <ul>
+                    <li><strong>Hover:</strong> View node details.</li>
+                    <li><strong>Add/Remove:</strong> Create or delete nodes and edges.</li>
+                </ul>
+            </li>
+        </ul>
+        <h3>Advanced Analysis</h3>
+        <ul>
+            <li><strong>Centrality Analysis:</strong> Identify key nodes.</li>
+            <li><strong>Shortest Path:</strong> Find efficient node-to-node routes.</li>
+            <li><strong>Clustering:</strong> Detect subsystems or node groups.</li>
+        </ul>
+        <p>Results are displayed graphically and in tabular form.</p>
+    </section>
+    <section>
+        <h2>Interactive Features</h2>
+        <ul>
+            <li>Drag and rearrange nodes for better visualization.</li>
+            <li>Highlight connections by selecting multiple nodes.</li>
+            <li>Customize node colors and sizes.</li>
+            <li>Use <strong>"Graph Summary"</strong> to view network statistics.</li>
+        </ul>
+    </section>
+    <section>
+        <h2>Data Management</h2>
+        <ul>
+            <li>Upload files in <code>.xml</code> or <code>.sbml</code> format.</li>
+            <li>Export modified graphs in SBML format or as PNG images.</li>
+            <li>Save progress using <strong>"Export SBML"</strong>.</li>
+        </ul>
+    </section>
+    <section>
+        <h2>Troubleshooting and FAQs</h2>
+        <ul>
+            <li>Ensure your SBML file is correctly formatted and under 10 MB.</li>
+            <li>Test with the sample SBML file to verify functionality.</li>
+            <li>For performance issues, reduce network complexity.</li>
+        </ul>
+        <p>For assistance, contact: <a href="mailto:support@ana-metabo.com">support@ana-metabo.com</a>.</p>
+    </section>
+    <section>
+        <h2>Credits and Licensing</h2>
+        <p>AnaMetabo was developed by:</p>
+        <ul>
+            <li>Céline Hosteins</li>
+            <li>Linda Khodja</li>
+            <li>Franck Sanchez</li>
+            <li>Ilham Bedraoui</li>
+            <li>Maroa Alani</li>
+        </ul>
+        <p>Supervised by Marie Beurton-Aimar. Licensed for academic and research purposes. Proper attribution is required for publications utilizing AnaMetabo's outputs.</p>
+    </section>
+</main>
+<footer>
+    <p>&copy; 2024 AnaMetabo Team. All rights reserved.</p>
+</footer>
+</body>
+</html>
