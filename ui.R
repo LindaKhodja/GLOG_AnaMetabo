@@ -8,7 +8,7 @@ ui <- dashboardPage(
   # Header of the Dashboard (title and logo can be customized)
   dashboardHeader(
     title = tags$div(
-      tags$img(src = "logo.png", height = "40px", style = "margin-right: 10px;"),  # Add logo in the header
+      tags$img(src = "network.png", height = "30px", style = "margin-right: 10px;"),  # Add logo in the header
       "AnaMetabo™"
     )
   ),
@@ -30,7 +30,7 @@ ui <- dashboardPage(
       # --- Home Tab ---
       tabItem(tabName = "home",
               h2("Welcome to AnaMetabo!"),  # Title of the home page
-              tags$img(src = "logo.png", height = "250px", style = "float: right; margin-right: 30px;"),  # Add logo in the Home Tab
+              tags$img(src = "network.png", height = "250px", style = "float: right; margin-right: 30px;"),  # Add logo in the Home Tab
               p("AnaMetabo is a bioinformatics tool designed for the analysis and visualization of metabolic networks from SBML files."),
               
               h3("Features by Tab:"),
