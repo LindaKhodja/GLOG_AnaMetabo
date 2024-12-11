@@ -6,12 +6,16 @@ ui <- dashboardPage(
   skin = "purple",  # Choose the theme for the application
   
   # Header of the Dashboard (title and logo can be customized)
-  dashboardHeader(title = "AnaMetabo™"),
+  dashboardHeader(
+    title = tags$div(
+      tags$img(src = "logo.png", height = "40px", style = "margin-right: 10px;"),  # Add logo in the header
+      "AnaMetabo™"
+    )
+  ),
   
   # Sidebar with navigation menu to switch between tabs
   dashboardSidebar(
     sidebarMenu(
-      # Menu items corresponding to different tabs in the app
       menuItem("Home", tabName = "home", icon = icon("home")),
       menuItem("Network Visualization", tabName = "network_vis", icon = icon("project-diagram")),
       menuItem("Advanced Analysis", tabName = "advanced_analysis", icon = icon("chart-line")),
@@ -26,11 +30,10 @@ ui <- dashboardPage(
       # --- Home Tab ---
       tabItem(tabName = "home",
               h2("Welcome to AnaMetabo!"),  # Title of the home page
-              p("AnaMetabo is a bioinformatics tool designed for the analysis and visualization of metabolic networks from SBML files."),  # Short description of the app
+              tags$img(src = "logo.png", height = "250px", style = "float: right; margin-right: 30px;"),  # Add logo in the Home Tab
+              p("AnaMetabo is a bioinformatics tool designed for the analysis and visualization of metabolic networks from SBML files."),
               
-              h3("Features by Tab:"),  # Describes features by each tab
-              
-              # Features Overview by Tab
+              h3("Features by Tab:"),
               h4("1. Network Visualization"),
               tags$ul(
                 tags$li("Interactively explore networks"),
@@ -50,17 +53,16 @@ ui <- dashboardPage(
               h4("Demo File:"),
               p("You can download a sample SBML file to test the available features."),
               p("Source : https://reactome.org/content/detail/R-HSA-168255"),
-              downloadButton("download_demo_sbml", "Download SBML File"),  # Button to download the demo SBML file
+              downloadButton("download_demo_sbml", "Download SBML File"),
               
               tags$hr(),
               
-              h3("About the Project"),  # Additional information about the project
+              h3("About the Project"),
               p("This webserver was developed as part of a Software Engineering project for the Master's program in Bioinformatics (M2) at the University of Bordeaux."),
               p(
                 tags$small("Please note that AnaMetabo™ is a fictitious brand name used for educational purposes only.")
               ),
               
-              # Footer content with credit and project information
               tags$footer(
                 p("Created by Céline Hosteins and Team."),
                 style = "position: fixed; bottom: 0; width: 100%; text-align: center; 
