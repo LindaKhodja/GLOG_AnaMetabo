@@ -64,7 +64,7 @@ ui <- dashboardPage(
               ),
               
               tags$footer(
-                p("Created by Céline Hosteins and Team."),
+                p("© 2024 AnaMetabo Project. Licensed under MIT License"),
                 style = "position: fixed; bottom: 0; width: 100%; text-align: center; 
                   background-color: #f8f9fa; padding: 10px; font-size: 12px; color: #555;"
               )
