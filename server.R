@@ -10,7 +10,7 @@ server <- function(input, output, session) {
     },
     content = function(file) {
       # Ensure the file example_file.sbml exists in the data/ folder
-      file.copy("data/H5N1_infection.sbml", file)
+      file.copy("examples/Influenza(H5N1)_infection.sbml", file)
     }
   )
   
