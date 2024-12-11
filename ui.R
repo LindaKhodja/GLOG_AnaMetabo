@@ -226,7 +226,7 @@ ui <- dashboardPage(
                                     tags$source(src = "tutorial_video.mp4", type = "video/mp4")),
                          
                          h3("Documentation"),
-                         p("For more in-depth documentation, please refer to the links below:"),
+                         p("For more in-depth documentation, please refer to the link below:"),
                          tags$ul(
                            tags$li(tags$a(href = "user_guide.html", "Full User Guide"))
                          )
