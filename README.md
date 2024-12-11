@@ -6,11 +6,17 @@ Web Application Access:
 
 # Features
 Graph Creation: Import an SBML file to create and visualize a biological network.
+
 Add/Delete Nodes & Edges: Easily add or remove nodes and edges from the graph.
+
 Node Customization: Customize node appearance based on shape, compartment, and color.
+
 Graph Analysis:
+
 Centrality Analysis: Evaluate the centrality of nodes using degree, closeness, or betweenness centrality metrics.
+
 Cluster Analysis: Identify clusters of nodes within the graph using community detection algorithms like walktrap.
+
 Graph Visualization: Visualize the network with interactive features such as zooming, panning, and node highlighting.
 
 # Installation
