@@ -1,6 +1,18 @@
 # utils.R
 # Utility functions for handling SBML files, graph processing, and visualization
 
+# Load necessary libraries
+library(shiny)
+library(shinydashboard)
+library(visNetwork)
+library(xml2)
+library(RColorBrewer)
+library(DT)
+library(memoise)
+library(igraph)
+library(future)
+library(promises)
+
 # Function to create an SBML file from graph data (nodes and edges)
 save_sbml <- function(nodes, edges, file_path) {
   # Initialize the SBML document with version 1.2
@@ -203,4 +215,112 @@ load_sbml_data <- function(sbml_file) {
   
   # Return a list containing both nodes and edges data frames
   list(nodes = nodes, edges = edges)
+}
+
+##### analysis functions ######
+
+#Shortest path 
+calculate_shortest_path <- function(graph, from_node, to_node) {
+  if (!requireNamespace("igraph", quietly = TRUE)) stop("igraph package required")
+  
+
+  igraph_graph <- igraph::graph_from_data_frame(
+    graph$edges, vertices = graph$nodes, directed = FALSE
+  )
+  
+
+  path <- tryCatch({
+    igraph::shortest_paths(
+      igraph_graph, 
+      from = igraph::V(igraph_graph)[name == from_node], 
+      to = igraph::V(igraph_graph)[name == to_node], 
+      output = "both"
+    )
+  }, error = function(e) {
+    showNotification("Error calculating shortest path", type = "error")
+    return(NULL)
+  })
+  
+  return(path)
+}
+# Community metrics
+calculate_community_metrics <- function(graph) {
+  if (!requireNamespace("igraph", quietly = TRUE)) stop("igraph package required")
+  
+
+  if (is.null(graph$igraph)) {
+    stop("Graph is not defined.")
+  }
+  
+
+  igraph_graph <- tryCatch({
+    igraph::as.undirected(graph$igraph, mode = "collapse")
+  }, error = function(e) {
+    stop("Failed to convert graph to undirected:", e$message)
+  })
+  
+
+  communities <- tryCatch({
+    igraph::cluster_louvain(igraph_graph)
+  }, error = function(e) {
+    stop("Error during community detection:", e$message)
+  })
+  
+
+  modularity <- igraph::modularity(communities)
+  sizes <- igraph::sizes(communities)
+  
+
+  community_metrics <- data.frame(
+    Community = seq_along(sizes),
+    Size = as.numeric(sizes),
+    Modularity = rep(modularity, length(sizes))
+  )
+  
+  return(community_metrics)
+}
+
+# Network resilience
+calculate_network_resilience <- function(graph) {
+  if (!requireNamespace("igraph", quietly = TRUE)) stop("igraph package required")
+  
+  igraph_graph <- graph$igraph
+  
+  initial_size <- max(components(igraph_graph)$csize)
+  
+
+  node_degrees <- degree(igraph_graph)
+  sorted_nodes <- names(sort(node_degrees, decreasing = TRUE))
+  
+  resilience_data <- data.frame(
+    Step = integer(),
+    Removed_Node = character(),
+    Largest_Component_Size = integer()
+  )
+  
+  for (i in seq_along(sorted_nodes)) {
+
+    if (vcount(igraph_graph) == 0) {
+      break
+    }
+    
+
+    igraph_graph <- delete_vertices(igraph_graph, sorted_nodes[i])
+    
+  
+    if (vcount(igraph_graph) > 0) {
+      largest_component <- max(components(igraph_graph)$csize)
+    } else {
+      largest_component <- 0
+    }
+    
+    # Save results
+    resilience_data <- rbind(resilience_data, data.frame(
+      Step = i,
+      Removed_Node = sorted_nodes[i],
+      Largest_Component_Size = largest_component
+    ))
+  }
+  
+  return(resilience_data)
 }
