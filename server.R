@@ -1,4 +1,5 @@
 #server.R
+source("utils.R")
 
 # Serveur (backend principal)
 server <- function(input, output, session) {
@@ -355,6 +356,11 @@ server <- function(input, output, session) {
     req(graph_data_analysis$igraph)
     showNotification("Analyzing centrality... please wait.", type = "message")
     
+    # Réinitialiser la légende
+    output$sidebar_legend <- renderUI({
+      tags$div("No legend to display")
+    })
+    
     metric <- switch(input$centrality_metric,
                      "degree" = degree(graph_data_analysis$igraph, mode = "all"),
                      "closeness" = closeness(graph_data_analysis$igraph, mode = "all"),
@@ -389,6 +395,11 @@ server <- function(input, output, session) {
     req(graph_data_analysis$igraph)
     showNotification("Identifying clusters... please wait.", type = "message")
     
+    # Réinitialiser la légende
+    output$sidebar_legend <- renderUI({
+      tags$div("No legend to display")
+    })
+    
     clusters <- cluster_walktrap(graph_data_analysis$igraph)
     membership <- membership(clusters)
     graph_data_analysis$nodes$color <- colorRampPalette(c("lightgreen", "darkgreen"))(length(unique(membership)))[membership]
@@ -418,32 +429,163 @@ server <- function(input, output, session) {
     req(graph_data_analysis$igraph, input$from_node, input$to_node)
     showNotification("Finding shortest path... please wait.", type = "message")
     
-    path <- shortest_paths(graph_data_analysis$igraph, 
-                           from = V(graph_data_analysis$igraph)[name == input$from_node], 
-                           to = V(graph_data_analysis$igraph)[name == input$to_node],
-                           output = "both")
+    # Réinitialiser la légende
+    output$sidebar_legend <- renderUI({
+      tags$div("No legend to display")
+    })
     
+    # Vérification de la validité du graphe
+    if (!igraph::is_igraph(graph_data_analysis$igraph)) {
+      showNotification("Invalid graph structure!", type = "error")
+      return()
+    }
+    
+    path <- calculate_shortest_path(graph_data_analysis, input$from_node, input$to_node)
+    
+    if (is.null(path) || length(path$vpath[[1]]) == 0) {
+      showNotification("No path found!", type = "error")
+      return()
+    }
+    
+    # Réinitialiser les couleurs
     graph_data_analysis$nodes$color <- "lightgray"
     graph_data_analysis$edges$color <- "black"
-    graph_data_analysis$nodes$color[path$vpath[[1]]$name] <- "green"
-    graph_data_analysis$edges$color[path$epath[[1]]$name] <- "green"
     
+    # Mettre à jour les couleurs des nœuds
+    node_ids <- igraph::V(graph_data_analysis$igraph)[path$vpath[[1]]]$name
+    edge_ids <- igraph::E(graph_data_analysis$igraph)[path$epath[[1]]]$name
+    
+    graph_data_analysis$nodes$color[graph_data_analysis$nodes$id %in% node_ids] <- "green"
+    graph_data_analysis$edges$color[graph_data_analysis$edges$id %in% edge_ids] <- "green"
+    
+    # Afficher les résultats dans la table
     graph_data_analysis$analysis_results <- data.frame(
-      Path_Nodes = names(path$vpath[[1]])
+      Path_Nodes = node_ids
     )
     
-    # Update Results Table
+    # Mettre à jour la table des résultats
     output$analysis_results <- renderDT({
       datatable(graph_data_analysis$analysis_results, options = list(pageLength = 10))
     })
     
-    # Update Graph
+    # Mettre à jour le graphe
     output$advanced_network <- renderVisNetwork({
       visNetwork(graph_data_analysis$nodes, graph_data_analysis$edges) %>%
         visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
         visEdges(arrows = "to") %>%
         visInteraction(zoomView = TRUE, dragView = TRUE)
     })
+  })
+  
+  # Community metrics
+  observeEvent(input$analyze_community_metrics, {
+    req(graph_data_analysis$igraph)
+    
+    showNotification("Calculating community metrics... please wait.", type = "message")
+    
+    metrics <- tryCatch({
+      calculate_community_metrics(graph_data_analysis)
+    }, error = function(e) {
+      showNotification(paste("Error:", e$message), type = "error")
+      return(NULL)
+    })
+    
+    if (is.null(metrics) || nrow(metrics) == 0) {
+      showNotification("No community metrics found!", type = "error")
+      return()
+    }
+    
+    # Mise à jour des résultats
+    graph_data_analysis$community_results <- metrics
+    
+    # Coloration par communauté
+    community_colors <- rainbow(length(unique(metrics$Community)))
+    graph_data_analysis$nodes$color <- community_colors[igraph::membership(
+      igraph::cluster_louvain(igraph::as.undirected(graph_data_analysis$igraph, mode = "collapse"))
+    )]
+    graph_data_analysis$community_colors <- community_colors
+    
+    # Mise à jour de la légende DANS observeEvent
+    output$sidebar_legend <- renderUI({
+      req(graph_data_analysis$community_results, graph_data_analysis$community_colors)
+      
+      unique_communities <- unique(graph_data_analysis$community_results$Community)
+      community_colors <- graph_data_analysis$community_colors
+      
+      legend_items <- lapply(seq_along(unique_communities), function(i) {
+        tags$div(
+          style = paste("margin-bottom: 5px; font-size: 14px; color:", community_colors[i], ";"),
+          tags$strong(paste("Community", unique_communities[i])),
+          tags$span(style = paste("background-color:", community_colors[i], 
+                                  "; display: inline-block; width: 20px; height: 20px; margin-left: 10px;"))
+        )
+      })
+      do.call(tagList, legend_items)
+    })
+    
+    # Mise à jour du graphe
+    output$advanced_network <- renderVisNetwork({
+      visNetwork(graph_data_analysis$nodes, graph_data_analysis$edges) %>%
+        visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+        visEdges(arrows = "to") %>%
+        visInteraction(zoomView = TRUE, dragView = TRUE)
+    })
+  })
+  
+  #Network resilience
+  observeEvent(input$analyze_resilience, {
+    req(graph_data_analysis$igraph)
+    showNotification("Analyzing network resilience... please wait.", type = "message")
+    
+    # Réinitialiser la légende
+    output$sidebar_legend <- renderUI({
+      tags$div("No legend to display")
+    })
+    
+    # Calcul de la résilience
+    resilience_results <- tryCatch({
+      calculate_network_resilience(graph_data_analysis)
+    }, error = function(e) {
+      showNotification(paste("Error:", e$message), type = "error")
+      return(NULL)
+    })
+    
+    if (is.null(resilience_results)) {
+      showNotification("No resilience data found!", type = "error")
+      return()
+    }
+    
+    # Mise à jour des résultats dans la table
+    graph_data_analysis$resilience_results <- resilience_results
+    output$analysis_results <- renderDT({
+      datatable(resilience_results, options = list(pageLength = 10))
+    })
+    
+    # Application du gradient de couleur
+    min_size <- min(resilience_results$Largest_Component_Size)
+    max_size <- max(resilience_results$Largest_Component_Size)
+    color_palette <- colorRampPalette(c("darkred", "lightyellow"))  # Gradient de couleurs
+    
+    # Calcul des couleurs pour chaque nœud supprimé
+    node_colors <- sapply(resilience_results$Largest_Component_Size, function(size) {
+      color_palette(100)[as.numeric(cut(size, breaks = 100))]
+    })
+    
+    # Mise à jour des couleurs des nœuds
+    graph_data_analysis$nodes$color <- "lightgray"  # Réinitialiser toutes les couleurs
+    for (i in seq_along(resilience_results$Removed_Node)) {
+      graph_data_analysis$nodes$color[graph_data_analysis$nodes$id == resilience_results$Removed_Node[i]] <- node_colors[i]
+    }
+    
+    # Mise à jour du graphe
+    output$advanced_network <- renderVisNetwork({
+      visNetwork(graph_data_analysis$nodes, graph_data_analysis$edges) %>%
+        visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+        visEdges(arrows = "to") %>%
+        visInteraction(zoomView = TRUE, dragView = TRUE)
+    })
+    
+    showNotification("Resilience analysis complete!", type = "message")
   })
   
   
