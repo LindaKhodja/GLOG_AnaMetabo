@@ -1,6 +1,15 @@
 # utils.R
 # Utility functions for handling SBML files, graph processing, and visualization
 
+# List of required packages
+required_packages <- c("shiny", "igraph", "visNetwork", "memoise", "DT", "xml2", "shinydashboard", "RColorBrewer", "future", "promises")
+
+# Install any missing packages
+missing_packages <- required_packages[!(required_packages %in% installed.packages()[, "Package"])]
+if (length(missing_packages) > 0) {
+  install.packages(missing_packages)
+}
+
 # Load necessary libraries
 library(shiny)
 library(shinydashboard)
