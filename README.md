@@ -30,10 +30,8 @@ visNetwork package: For rendering interactive graphs.
 igraph package: For graph manipulation and analysis.
 memoise package: For caching and optimizing file loading.
 DT package: For displaying analysis results in tables.
-Install the necessary packages by running the following R code:
 
-
-install.packages(c("shiny", "visNetwork", "igraph", "memoise", "DT"))
+The script will automatically install any missing packages for you.
 
 ## Running the Application
 Clone this repository to your local machine and navigate to the project directory. Then run the following command to start the app:
