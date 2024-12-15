@@ -2,7 +2,7 @@
 This is an interactive web-based application built with RShiny that allows users to visualize and analyze biological networks. The app can handle SBML (Systems Biology Markup Language) files to create graphs, and provides features for adding/deleting nodes and edges, as well as performing various types of analysis on the network. These analyses include centrality analysis and cluster analysis, which help identify important nodes and communities within the network.
 
 Web Application Access:
-(link) – No installation required.
+<http://ana-metabo-app.shinyapps.io/GLOG_AnaMetabo-main> – No installation required.
 
 # Features
 Graph Creation: Import an SBML file to create and visualize a biological network.
