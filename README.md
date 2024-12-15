@@ -1,4 +1,4 @@
-## Bioinformatics Network Visualization & Graph Analysis
+# Bioinformatics Network Visualization & Graph Analysis
 This is an interactive web-based application built with RShiny that allows users to visualize and analyze biological networks. The app can handle SBML (Systems Biology Markup Language) files to create graphs, and provides features for adding/deleting nodes and edges, as well as performing various types of analysis on the network. These analyses include centrality analysis and cluster analysis, which help identify important nodes and communities within the network.
 
 Web Application Access:
@@ -22,7 +22,7 @@ Graph Visualization: Visualize the network with interactive features such as zoo
 # Installation
 To run this application locally, follow the steps below.
 
-# Prerequisites
+## Prerequisites
 R (version 4.x or higher)
 RStudio (optional, but recommended)
 Shiny package: For building web applications.
@@ -35,7 +35,7 @@ Install the necessary packages by running the following R code:
 
 install.packages(c("shiny", "visNetwork", "igraph", "memoise", "DT"))
 
-# Running the Application
+## Running the Application
 Clone this repository to your local machine and navigate to the project directory. Then run the following command to start the app:
 
 shiny::runApp("path_to_project_directory")
@@ -44,7 +44,7 @@ This will launch the app in your default web browser.
 SBML File
 You will need to provide an SBML file (e.g., H5N1_infection.sbml) to load the network data. You can download a sample SBML file from the app interface or upload your own file for analysis.
 
-# Usage
+## Usage
 Interface
 Graph Creation:
 
