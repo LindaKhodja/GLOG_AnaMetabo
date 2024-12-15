@@ -1,8 +1,10 @@
 # ui.R
 # User Interface (UI) for the AnaMetabo application
 # This UI is built using the Shiny Dashboard layout to organize the application structure.
+source("utils.R")
 
 ui <- dashboardPage(
+  title = "AnaMetabo™",  #Title
   skin = "purple",  # Choose the theme for the application
   
   # Header of the Dashboard (title and logo can be customized)
@@ -203,7 +205,8 @@ ui <- dashboardPage(
                     ),
                     
                     tags$hr(),
-                    textOutput("graph_summary_advanced")  # Display analysis summary
+                    textOutput("graph_summary_advanced"),  # Display analysis summary
+                    uiOutput("sidebar_legend")
                   ),
                   
                   # Main panel for displaying the results of advanced analysis
